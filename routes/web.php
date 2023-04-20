@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
+use App\Http\Controllers\PostController;
+
 
 /*
 |--------------------------------------------------------------------------
