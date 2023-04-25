@@ -6,6 +6,7 @@ use App\Http\Controllers\LifeCycleTestController;
 use App\Http\Controllers\PostController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
