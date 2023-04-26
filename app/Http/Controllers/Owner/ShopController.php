@@ -40,8 +40,7 @@ class ShopController extends Controller
 
         return view(
             'owner.shops.index',
-            compact('shops')
-        );
+            compact('shops'));
     }
 
     public function edit($id)
