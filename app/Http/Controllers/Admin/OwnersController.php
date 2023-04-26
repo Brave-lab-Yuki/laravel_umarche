@@ -146,8 +146,7 @@ class OwnersController extends Controller
 
         return redirect()
         ->route('admin.owners.index')
-        ->with(['message'=>'オーナー情報を削除しました。',
-    'status' => 'alert']);
+        ->with(['message'=>'オーナー情報を削除しました。','status' => 'alert']);
     }
     public function expiredOwnerIndex(){
         $expiredOwners = Owner::onlyTrashed()->get();
