@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Shop;
@@ -25,12 +25,12 @@ class ProductController extends Controller
 
         $this->middleware(function ($request, $next) {
 
-            $id = $request->route()->parameter('product'); 
-            if (!is_null($id)) { 
+            $id = $request->route()->parameter('product');
+            if (!is_null($id)) {
                 $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
-                $productId = (int)$productsOwnerId; 
-                if ($productId !== Auth::id()) { 
-                    abort(404); 
+                $productId = (int)$productsOwnerId;
+                if ($productId !== Auth::id()) {
+                    abort(404);
                 }
             }
             return $next($request);
@@ -38,14 +38,16 @@ class ProductController extends Controller
     }
     public function index()
     {
-       // $products = Owner::findOrFail(Auth::id())->shop->product;
+        // $products = Owner::findOrFail(Auth::id())->shop->product;
         $ownerInfo = Owner::with('shop.product.imageFirst')
-        ->where('id',Auth::id())->get();
+            ->where('id', Auth::id())->get();
 
         // dd($ownerInfo);
 
-        return view('owner.products.index',
-        compact('ownerInfo'));
+        return view(
+            'owner.products.index',
+            compact('ownerInfo')
+        );
     }
 
     /**
@@ -55,20 +57,22 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $shops = Shop::where('owner_id' , Auth::id())
-        ->select('id', 'name')
-        ->get();
+        $shops = Shop::where('owner_id', Auth::id())
+            ->select('id', 'name')
+            ->get();
 
-        $images = Image::where('owner_id' , Auth::id())
-        ->select('id','title','filename')
-        ->orderBy('updated_at','desc')
-        ->get();
+        $images = Image::where('owner_id', Auth::id())
+            ->select('id', 'title', 'filename')
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         $categories = PrimaryCategory::with('secondary')
-        ->get();
+            ->get();
 
-        return view('owner.products.create',
-        compact('shops','images','categories'));
+        return view(
+            'owner.products.create',
+            compact('shops', 'images', 'categories')
+        );
     }
 
     /**
@@ -95,8 +99,8 @@ class ProductController extends Controller
             'is_selling' => 'required'
         ]);
 
-        try{
-            DB::transaction(function() use($request) {
+        try {
+            DB::transaction(function () use ($request) {
                 $product = Product::create([
                     'name' => $request->name,
                     'information' => $request->information,
@@ -109,48 +113,49 @@ class ProductController extends Controller
                     'image3' => $request->image3,
                     'image4' => $request->image4,
                     'is_selling' => $request->is_selling
-                    ]);
+                ]);
 
                 Stock::create([
                     'product_id' => $product->id,
                     'type' => 1,
                     'quantity' => $request->quantity
                 ]);
-                    }, 2);
-        }catch(Throwable $e){
+            }, 2);
+        } catch (Throwable $e) {
             Log::error($e);
             throw $e;
         }
 
 
         return redirect()
-        ->route('owner.products.index')
-        ->with([
-            'message' => '商品登録しました。',
-            'status' => 'info']);
-
+            ->route('owner.products.index')
+            ->with([
+                'message' => '商品登録しました。',
+                'status' => 'info'
+            ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)
+            ->sum('quantity');
+            $shops = Shop::where('owner_id', Auth::id())
+            ->select('id', 'name')
+            ->get();
+
+        $images = Image::where('owner_id', Auth::id())
+            ->select('id', 'title', 'filename')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        $categories = PrimaryCategory::with('secondary')
+            ->get();
+
+        return view(
+            'owner.products.edit',
+            compact('product' , 'quantity', 'shops' , 'images' , 'categories'));
+
     }
 
     /**
