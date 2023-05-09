@@ -8,6 +8,7 @@ use App\Models\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use InterventionImage;
+// use Intervention\Image\Facades\Image as InterventionImage;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
 
@@ -53,14 +54,14 @@ class ShopController extends Controller
     public function update(UploadImageRequest $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'information' => ['required', 'string', 'max:1000'],
-            'is_selling' => ['required'],
+            'name' => 'required|string|max:50',
+            'information' => 'required|string|max:1000',
+            'is_selling' => 'required',
         ]);
 
-        $imageFile = $request->image; //一時保存
-        if (!is_null($imageFile) && $imageFile->isValid()) {
-            $fileNameToStore = ImageService::upload($imageFile,'shops');
+        $imageFile = $request->image;
+        if(!is_null($imageFile) && $imageFile->isValid() ){
+            $fileNameToStore = ImageService::upload($imageFile, 'shops');    
         }
 
         $shop = Shop::findOrFail($id);
