@@ -5,6 +5,7 @@ use App\Http\Controllers\Owner\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\User\ItemController;
+use App\Http\Controllers\User\CartController;
 
 
 
@@ -29,6 +30,10 @@ Route::middleware('auth:users')->group(function () {
 
 });
 
+Route::prefix('cart')->
+middleware('auth:users')->group(function () {
+    Route::post('add', [CartController::class,'add'])->name('cart.add');
+});
 // Route::get('/dashboard', function () {
 //     return view('user.dashboard');
 // })->middleware(['auth:users'])->name('dashboard');
