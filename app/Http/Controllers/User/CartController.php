@@ -95,6 +95,7 @@ class CartController extends Controller
         ]);
 
     }
+    dd('test');
 
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
