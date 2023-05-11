@@ -71,7 +71,7 @@ class CartController extends Controller
             $quantity = Stock::where('product_id' , $product->id)->sum('quantity');
 
             if($product->pivot->quantity > $quantity){
-                return view('user.cart.index');
+                return redirect()->route('user.cart.index');
             } else {
                 $lineItem = [
                     'name' => $product->name,
@@ -95,7 +95,7 @@ class CartController extends Controller
         ]);
 
     }
-    dd('test');
+    // dd('test');
 
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
@@ -107,7 +107,7 @@ class CartController extends Controller
             'cancel_url' => route('user.cart.index'),
         ]);
 
-        $publickey = env('STRIPE_PUBLIC_KEY');
+        $publicKey = env('STRIPE_PUBLIC_KEY');
 
         return view('user.checkout',
         compact('session','publicKey'));
