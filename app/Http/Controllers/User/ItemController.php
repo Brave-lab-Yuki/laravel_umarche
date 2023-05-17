@@ -16,7 +16,7 @@ class ItemController extends Controller
     $this->middleware('auth:users');
     $this->middleware(function ($request, $next) {
 
-        $id = $request->route()->parameter('item');
+        $id = $request->route()->parameter('items');
         if (!is_null($id)) {
             $itemId = Product::availableItems()->where('products.id',$id)->exists();
             if (!$itemId) {
@@ -37,14 +37,25 @@ class ItemController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        $quantity = Stock::where('product_id', $product->id)
+        $product = Product::findOrFail((int)$id);
+        // 一個だけとる書き方
+        $quantity = Stock::where('product_id', (int)$product->id)
+        // ↑ここ
         ->sum('quantity');
+        // dd($quantity);
 
         if($quantity > 9){
             $quantity = 9;
             }
-
         return view('user.show' , compact('product' , 'quantity'));
     }
+
+    public function store($shop)
+    {
+// dd($shop);
+        // $items = Product::where('shop_id', $shop->items);
+        $products = Product::where('shop_id', (int)$shop)->get();
+        return view('user.store', compact('products'));
+    }
+
 }

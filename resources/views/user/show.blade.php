@@ -86,10 +86,15 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <button
-                                        class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">カートに入れる
-                                    </button>
-                                    <input type="hidden" name="product_id" value="{{ $product->id}}">
+                                    @if ($quantity > 0)
+                                        <button
+                                            class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">カートに入れる</button>
+                                    @else
+                                        <button
+                                            class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"
+                                            disabled>SOLD OUT</button>
+                                    @endif <input type="hidden" name="product_id"
+                                        value="{{ $product->id }}">
                                 </form>
                             </div>
                         </div>

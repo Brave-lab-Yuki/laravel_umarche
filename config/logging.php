@@ -115,4 +115,12 @@ return [
         ],
     ],
 
+'loggers' => [
+    'file' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => 'debug',
+    ],
+],
+
 ];

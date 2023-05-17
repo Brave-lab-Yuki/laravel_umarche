@@ -6,7 +6,7 @@
             </h2>
 
             <div>
-                <form method="get" action="{{ route('user.items.index') }}">
+                <form method="get" action="{{ route('user.shops.index') }}">
                     <div class="flex">
                         <div>
                             <span class="text-sm">表示順</span><br>

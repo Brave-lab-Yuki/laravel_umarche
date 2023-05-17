@@ -44,9 +44,9 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin'])->name('dashboard');
 
-Route::get('/component-test1', [ComponentTestController::class, 'showComponent1']);
-Route::get('/component-test2', [ComponentTestController::class, 'showComponent2']);
-Route::get('/servicecontainer', [LifeCycleTestController::class, 'showServiceContainerTest']);
+// Route::get('/component-test1', [ComponentTestController::class, 'showComponent1']);
+// Route::get('/component-test2', [ComponentTestController::class, 'showComponent2']);
+// Route::get('/servicecontainer', [LifeCycleTestController::class, 'showServiceContainerTest']);
 
 
 Route::middleware('guest')->group(function () {
